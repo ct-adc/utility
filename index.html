@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>list</title>
+    <link href="http://static.uc108.com/cdn/bootstrap/3.3.5/css/bootstrap.dz.min.css" rel="stylesheet">
+    <link href="http://static.uc108.com/cdn/bootstrap/3.3.5/css/theme.css" rel="stylesheet">
+</head>
+<body>
+<script src="asset/utility.js"></script>
+<script>
+    var obj1={
+        name:1,
+        age:1,
+        hobbies:[{name:'music'},{name:'snowboarding'},{name:'skydiving'}]
+    };
+    console.log(utility.objTransfer.upperKey(obj1));
+
+    var obj2={
+        Name:1,
+        Age:1,
+        Hobbies:[{Name:'music'},{Name:'snowboarding'},{Name:'skydiving'}]
+    };
+    console.log(utility.objTransfer.lowerKey(obj2));
+</script>
+</body>
+</html>
