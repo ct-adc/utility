@@ -3,9 +3,11 @@
  */
 define(function(){
   var base=require('./base'),
-    objTransfer=require('./objTransfer');
+    objTransfer=require('./objTransfer'),
+    dateFilter=require('./dateFilter');
   return {
     base:base,
-    objTransfer:objTransfer
+    objTransfer:objTransfer,
+    dateFilter:dateFilter
   }
 });

@@ -17,5 +17,9 @@ define({
   },
   isObject:function(val){
     return typeof val==='object' && !utility.base.isArray(val);
-  }
+  },
+  //将字符串转化为数字
+  toInt: function(str){
+    return parseInt(str, 10) || 0;
+  },
 });
