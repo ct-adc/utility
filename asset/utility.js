@@ -57,18 +57,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	var __WEBPACK_AMD_DEFINE_RESULT__;/**
 	 * Created by rubyisapm on 16/12/21.
 	 */
-	!(__WEBPACK_AMD_DEFINE_RESULT__ = function(){
-	  var base = __webpack_require__( 1 ),
-	    objTransfer = __webpack_require__( 2 ),
-	    _localStorage = __webpack_require__( 3 ),
-		_sessionStorage = __webpack_require__( 4 );
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+	  var base = __webpack_require__(1),
+	    objTransfer = __webpack_require__(2),
+	    _cookie = __webpack_require__(3),
+	    _localStorage = __webpack_require__(4),
+	    _sessionStorage = __webpack_require__(5);
 
 	  return {
 	    base: base,
 	    objTransfer: objTransfer,
+	    cookie: _cookie,
 	    localStorage: _localStorage,
-	    sessionStorage:  _sessionStorage
-	  }
+	    sessionStorage: _sessionStorage
+	  };
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
@@ -180,6 +182,131 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * localStorage
 	 * 
+	 * Copyright https://developer.mozilla.org/zh-CN/docs/Web/API/Document/cookie
+	 * 
+	 * Date: 2016-12-23 16:27:00
+	 */
+
+
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+		"use strict";
+
+		/**
+		 * 获取 cookie
+		 * @param  {String} sKey 键名
+		 * @return {String}      键名
+		 */
+		function get(sKey) {
+			return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
+		}
+
+		/**
+		 * 设置 cookie
+		 * @param {String} sKey    键名
+		 * @param {String} sValue  键值
+		 * @param {[type]} vEnd    过期时间
+		 * @param {String} sPath   路径
+		 * @param {String} sDomain 域名
+		 * @param {Boolean} bSecure 安全
+		 */
+		function set(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+			var sExpires = '';
+
+			if ( !sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey) ) {
+				return false;
+			}
+
+			if (vEnd) {
+				switch (vEnd.constructor) {
+					case Number:
+						sExpires = vEnd === Infinity ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT' : '; max-age=' + vEnd;
+						break;
+
+					case String:
+						sExpires = '; expires=' + vEnd;
+						break;
+						
+					case Date:
+						sExpires = '; expires=' + vEnd.toUTCString();
+						break;
+				}
+			}
+
+			document.cookie = encodeURIComponent( sKey ) + '=' + encodeURIComponent( sValue ) +
+				sExpires +
+				(sDomain ? '; domain=' + sDomain : '') +
+				(sPath ? '; path=' + sPath : '') +
+				(bSecure ? '; secure' : '');
+
+			return true;
+		}
+
+		/**
+		 * 移除某个 cookie
+		 * @param  {String} sKey    键名
+		 * @param  {String} sPath   路径
+		 * @param  {String} sDomain 域名
+		 * @return {Boolean}        true-删除成功，false-删除失败
+		 */
+		function remove(sKey, sPath, sDomain) {
+			if ( !sKey || !has(sKey) ) {
+				return false;
+			}
+
+			document.cookie = encodeURIComponent(sKey) + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT' +
+								(sDomain ? '; domain=' + sDomain : '') +
+									(sPath ? '; path=' + sPath : '');
+			
+			return true;
+		}
+
+		/**
+		 * 判断是否拥有某个 key
+		 * @param  {String}  sKey 键名
+		 * @return {Boolean}
+		 */
+		function has(sKey) {
+			var patt = new RegExp( '(?:^|;\\s*)' + encodeURIComponent( sKey ).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=' );
+
+			return patt.test( document.cookie );
+		}
+
+		/**
+		 * 获取
+		 * @return {Object} 所有的 cookie 键值对
+		 */
+		function keys() {
+			var map     = {},
+				allKeys = document.cookie.
+							replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, '').
+								split( /\s*(?:\=[^;]*)?;\s*/ );
+
+
+			allKeys.forEach(function( key ) {
+				map[ decodeURIComponent(key) ] = get( key );
+			});
+
+			return map;
+		}
+
+		return {
+			get    : get,
+			set    : set,
+			remove : remove,
+			has    : has,
+			keys   : keys
+		};
+	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * v1.0.0
+	 *
+	 * localStorage
+	 * 
 	 * Copyright 2016 Live
 	 * Licensed MIT
 	 * 
@@ -194,20 +321,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		const IS_LOCAL_STORAGE_AVAILABLE = base.isStorageAvailable( 'localStorage' );
 
-		function set( key, value ) {
+		/**
+		 * 设置一个 storage
+		 * @param {String} sKey   键名
+		 * @param {String} sValue 键值
+		 */
+		function set( sKey, sValue ) {
 			if ( IS_LOCAL_STORAGE_AVAILABLE ) {
 
-				localStorage.setItem( key, value );
+				localStorage.setItem( sKey, sValue );
 			}
 		}
 
-		function get( key ) {
+		/**
+		 * 获取 storage
+		 * @param  {String} sKey 键名
+		 * @return {String}      键值
+		 */
+		function get( sKey ) {
 			if ( IS_LOCAL_STORAGE_AVAILABLE ) {
 
-				return localStorage.getItem( key );
+				return localStorage.getItem( sKey );
 			}
 		}
 
+		/**
+		 * 清除所有 storage
+		 */
 		function clear() {
 			if ( IS_LOCAL_STORAGE_AVAILABLE ) {
 
@@ -215,10 +355,14 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}
 
-		function remove( key ) {
+		/**
+		 * 删除一个 storage
+		 * @param  {String} sKey 键名
+		 */
+		function remove( sKey ) {
 			if ( IS_LOCAL_STORAGE_AVAILABLE ) {
 
-				localStorage.removeItem( key );
+				localStorage.removeItem( sKey );
 			}
 		}
 
@@ -231,7 +375,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -253,20 +397,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		const IS_SESSION_STORAGE_AVAILABLE = base.isStorageAvailable( 'sessionStorage' );
 
-		function set( key, value ) {
+		/**
+		 * 设置一个 storage
+		 * @param {String} sKey   键名
+		 * @param {String} sValue 键值
+		 */
+		function set( sKey, sValue ) {
 			if ( IS_SESSION_STORAGE_AVAILABLE ) {
 
-				sessionStorage.setItem( key, value );
+				sessionStorage.setItem( sKey, sValue );
 			}
 		}
 
-		function get( key ) {
+		/**
+		 * 获取 storage
+		 * @param  {String} sKey 键名
+		 * @return {String}      键值
+		 */
+		function get( sKey ) {
 			if ( IS_SESSION_STORAGE_AVAILABLE ) {
 
-				return sessionStorage.getItem( key );
+				return sessionStorage.getItem( sKey );
 			}
 		}
 
+		/**
+		 * 清除所有 storage
+		 */
 		function clear() {
 			if ( IS_SESSION_STORAGE_AVAILABLE ) {
 				
@@ -274,10 +431,14 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}
 
-		function remove( key ) {
+		/**
+		 * 删除一个 storage
+		 * @param  {String} sKey 键名
+		 */
+		function remove( sKey ) {
 			if ( IS_SESSION_STORAGE_AVAILABLE ) {
 
-				sessionStorage.removeItem( key );
+				sessionStorage.removeItem( sKey );
 			}
 		}
 

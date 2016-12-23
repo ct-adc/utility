@@ -17,20 +17,33 @@ define(function() {
 
 	const IS_LOCAL_STORAGE_AVAILABLE = base.isStorageAvailable( 'localStorage' );
 
-	function set( key, value ) {
+	/**
+	 * 设置一个 storage
+	 * @param {String} sKey   键名
+	 * @param {String} sValue 键值
+	 */
+	function set( sKey, sValue ) {
 		if ( IS_LOCAL_STORAGE_AVAILABLE ) {
 
-			localStorage.setItem( key, value );
+			localStorage.setItem( sKey, sValue );
 		}
 	}
 
-	function get( key ) {
+	/**
+	 * 获取 storage
+	 * @param  {String} sKey 键名
+	 * @return {String}      键值
+	 */
+	function get( sKey ) {
 		if ( IS_LOCAL_STORAGE_AVAILABLE ) {
 
-			return localStorage.getItem( key );
+			return localStorage.getItem( sKey );
 		}
 	}
 
+	/**
+	 * 清除所有 storage
+	 */
 	function clear() {
 		if ( IS_LOCAL_STORAGE_AVAILABLE ) {
 
@@ -38,10 +51,14 @@ define(function() {
 		}
 	}
 
-	function remove( key ) {
+	/**
+	 * 删除一个 storage
+	 * @param  {String} sKey 键名
+	 */
+	function remove( sKey ) {
 		if ( IS_LOCAL_STORAGE_AVAILABLE ) {
 
-			localStorage.removeItem( key );
+			localStorage.removeItem( sKey );
 		}
 	}
 
