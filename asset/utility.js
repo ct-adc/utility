@@ -317,7 +317,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 		'use strict';
 
-		const base = __webpack_require__(1);
+		let base = __webpack_require__(1);
 
 		const IS_LOCAL_STORAGE_AVAILABLE = base.isStorageAvailable( 'localStorage' );
 
@@ -393,7 +393,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 		'use strict';
 
-		const base = __webpack_require__(1);
+		let base = __webpack_require__(1);
 
 		const IS_SESSION_STORAGE_AVAILABLE = base.isStorageAvailable( 'sessionStorage' );
 

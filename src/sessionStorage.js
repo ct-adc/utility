@@ -13,7 +13,7 @@
 define(function() {
 	'use strict';
 
-	const base = require('./base');
+	let base = require('./base');
 
 	const IS_SESSION_STORAGE_AVAILABLE = base.isStorageAvailable( 'sessionStorage' );
 
