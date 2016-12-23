@@ -22,6 +22,31 @@
         Hobbies:[{Name:'music'},{Name:'snowboarding'},{Name:'skydiving'}]
     };
     console.log(utility.objTransfer.lowerKey(obj2));
+
+    // Storage test
+    utility.localStorage.set( 'testLocal', 123 );
+    utility.sessionStorage.set( 'testSession', 223 );
+    
+    console.log( utility.localStorage.get('testLocal') );
+    console.log( utility.sessionStorage.get('testSession') );
+
+    utility.localStorage.remove( 'testLocal' );
+    utility.sessionStorage.remove( 'testSession' );
+
+    console.log( utility.localStorage.get('testLocal') );
+    console.log( utility.sessionStorage.get('testSession') );
+
+    utility.localStorage.set( 'testLocal', 323 );
+    utility.sessionStorage.set( 'testSession', 423 );
+    
+    console.log( utility.localStorage.get('testLocal') );
+    console.log( utility.sessionStorage.get('testSession') );
+
+    utility.localStorage.clear();
+    utility.sessionStorage.clear();
+
+    console.log( utility.localStorage.get('testLocal') );
+    console.log( utility.sessionStorage.get('testSession') );
 </script>
 </body>
 </html>

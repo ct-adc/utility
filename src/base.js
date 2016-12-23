@@ -17,5 +17,18 @@ define({
   },
   isObject:function(val){
     return typeof val==='object' && !utility.base.isArray(val);
+  },
+  isStorageAvailable: function(type = 'localStorage') {
+    try {
+      let x = '__storage_test__',
+        storage = window[ type ];
+
+      storage.setItem( x, x );
+      storage.removeItem( x );
+
+      return true;
+    } catch(e) {
+      return false;
+    }
   }
 });

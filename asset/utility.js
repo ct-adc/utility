@@ -58,11 +58,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Created by rubyisapm on 16/12/21.
 	 */
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function(){
-	  var base=__webpack_require__(1),
-	    objTransfer=__webpack_require__(2);
+	  var base = __webpack_require__( 1 ),
+	    objTransfer = __webpack_require__( 2 ),
+	    _localStorage = __webpack_require__( 3 ),
+		_sessionStorage = __webpack_require__( 4 );
+
 	  return {
-	    base:base,
-	    objTransfer:objTransfer
+	    base: base,
+	    objTransfer: objTransfer,
+	    localStorage: _localStorage,
+	    sessionStorage:  _sessionStorage
 	  }
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
@@ -89,6 +94,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  isObject:function(val){
 	    return typeof val==='object' && !utility.base.isArray(val);
+	  },
+	  isStorageAvailable: function(type = 'localStorage') {
+	    try {
+	      let x = '__storage_test__',
+	        storage = window[ type ];
+
+	      storage.setItem( x, x );
+	      storage.removeItem( x );
+
+	      return true;
+	    } catch(e) {
+	      return false;
+	    }
 	  }
 	});
 
@@ -151,6 +169,124 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return transferKeyInObj(base.lowerCaseFirst,obj);
 	    }
 	  }
+	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * v1.0.0
+	 *
+	 * localStorage
+	 * 
+	 * Copyright 2016 Live
+	 * Licensed MIT
+	 * 
+	 * Date: 2016-12-08 11:13:29
+	 */
+
+
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+		'use strict';
+
+		const base = __webpack_require__(1);
+
+		const IS_LOCAL_STORAGE_AVAILABLE = base.isStorageAvailable( 'localStorage' );
+
+		function set( key, value ) {
+			if ( IS_LOCAL_STORAGE_AVAILABLE ) {
+
+				localStorage.setItem( key, value );
+			}
+		}
+
+		function get( key ) {
+			if ( IS_LOCAL_STORAGE_AVAILABLE ) {
+
+				return localStorage.getItem( key );
+			}
+		}
+
+		function clear() {
+			if ( IS_LOCAL_STORAGE_AVAILABLE ) {
+
+				localStorage.clear();
+			}
+		}
+
+		function remove( key ) {
+			if ( IS_LOCAL_STORAGE_AVAILABLE ) {
+
+				localStorage.removeItem( key );
+			}
+		}
+
+		return {
+			set: set,
+			get: get,
+			clear: clear,
+			remove: remove
+		};
+	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * v1.0.0
+	 *
+	 * sessionStorage
+	 * 
+	 * Copyright 2016 Live
+	 * Licensed MIT
+	 * 
+	 * Date: 2016-12-08 11:13:29
+	 */
+
+
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+		'use strict';
+
+		const base = __webpack_require__(1);
+
+		const IS_SESSION_STORAGE_AVAILABLE = base.isStorageAvailable( 'sessionStorage' );
+
+		function set( key, value ) {
+			if ( IS_SESSION_STORAGE_AVAILABLE ) {
+
+				sessionStorage.setItem( key, value );
+			}
+		}
+
+		function get( key ) {
+			if ( IS_SESSION_STORAGE_AVAILABLE ) {
+
+				return sessionStorage.getItem( key );
+			}
+		}
+
+		function clear() {
+			if ( IS_SESSION_STORAGE_AVAILABLE ) {
+				
+				sessionStorage.clear();
+			}
+		}
+
+		function remove( key ) {
+			if ( IS_SESSION_STORAGE_AVAILABLE ) {
+
+				sessionStorage.removeItem( key );
+			}
+		}
+
+		return {
+			set: set,
+			get: get,
+			clear: clear,
+			remove: remove
+		};
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ }
