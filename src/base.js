@@ -39,5 +39,21 @@ define({
      */
     isObject: function (val) {
         return typeof val === 'object' && !utility.base.isArray(val);
+    },
+  /**
+   * 判断浏览器是否支持storage
+   * @param {string} type 'localStorage'/'sessionStorage'
+   * @returns {boolean}
+   */
+    isStorageAvailable: function(type) {
+      try {
+        var x = '__storage_test__',
+          storage = window[ type ];
+        storage.setItem( x, x );
+        storage.removeItem( x );
+        return true;
+      } catch(e) {
+        return false;
+      }
     }
 });
