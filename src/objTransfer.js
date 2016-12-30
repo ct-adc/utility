@@ -3,6 +3,13 @@
  */
 define(function(){
   var base=require('./base');
+
+  /**
+   * 按照给定的规则转换原对象中的key的格式
+   * @param {Function} transfer 转换函数
+   * @param {?Object} obj 原对象
+   * @returns {?Object} obj 转换后的对象
+   */
   function transferKeyInObj(transfer,obj){
     if(obj===null){
       return obj;
@@ -26,6 +33,12 @@ define(function(){
     return newObj;
   }
 
+  /**
+   * 按照给定的规则转换原数组中的对象中的key的格式
+   * @param {Function} transfer 转换函数
+   * @param {Array} arr 原对象
+   * @returns {?Object} obj 转换后的对象
+   */
   function transferKeyInArray(transfer,arr){
     if(arr.length==0){
       return arr;
@@ -43,12 +56,20 @@ define(function(){
     return newArray;
   }
 
-
-
   return {
+    /**
+     * 将原对象中的key的首字母大写
+     * @param {?Object} obj 原对象
+     * @returns {?Object} 转换后的对象
+     */
     upperKey:function(obj){
       return transferKeyInObj(base.upperCaseFirst,obj);
     },
+    /**
+     * 将原对象中的key的首字母小写
+     * @param {?Object} obj 原对象
+     * @returns {?Object} 转换后的对象
+     */
     lowerKey:function(obj){
       return transferKeyInObj(base.lowerCaseFirst,obj);
     }
