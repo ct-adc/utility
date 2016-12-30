@@ -13,9 +13,9 @@
 define(function() {
 	'use strict';
 
-	let base = require('./base');
+	var base = require('./base');
 
-	const IS_LOCAL_STORAGE_AVAILABLE = base.isStorageAvailable( 'localStorage' );
+	var IS_LOCAL_STORAGE_AVAILABLE = base.isStorageAvailable( 'localStorage' );
 
 	/**
 	 * 设置一个 storage

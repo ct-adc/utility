@@ -13,9 +13,9 @@
 define(function() {
 	'use strict';
 
-	let base = require('./base');
+	var base = require('./base');
 
-	const IS_SESSION_STORAGE_AVAILABLE = base.isStorageAvailable( 'sessionStorage' );
+	var IS_SESSION_STORAGE_AVAILABLE = base.isStorageAvailable( 'sessionStorage' );
 
 	/**
 	 * 设置一个 storage

@@ -20,7 +20,7 @@ define({
   },
   isStorageAvailable: function(type = 'localStorage') {
     try {
-      let x = '__storage_test__',
+      var x = '__storage_test__',
         storage = window[ type ];
 
       storage.setItem( x, x );
