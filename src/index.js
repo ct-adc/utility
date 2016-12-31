@@ -1,18 +1,20 @@
 /**
- * Created by rubyisapm on 16/12/21.
+ * @author rubyisapm
  */
-define(function() {
-  var base = require('./base'),
-    objTransfer = require('./objTransfer'),
-    _cookie = require('./cookie'),
-    _localStorage = require('./localStorage'),
-    _sessionStorage = require('./sessionStorage');
+define(function () {
+    var base = require('./base'),
+        objTransfer = require('./objTransfer'),
+        cookie = require('./cookie'),
+        localStorage = require('./localStorage'),
+        sessionStorage = require('./sessionStorage'),
+        URIParser = require('./URIParser');
 
-  return {
-    base: base,
-    objTransfer: objTransfer,
-    cookie: _cookie,
-    localStorage: _localStorage,
-    sessionStorage: _sessionStorage
-  };
+    return {
+        base: base,
+        objTransfer: objTransfer,
+        cookie: cookie,
+        localStorage: localStorage,
+        sessionStorage: sessionStorage,
+        URIParser:URIParser
+    };
 });

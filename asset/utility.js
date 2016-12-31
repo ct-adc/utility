@@ -55,22 +55,24 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/**
-	 * Created by rubyisapm on 16/12/21.
+	 * @author rubyisapm
 	 */
-	!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
-	  var base = __webpack_require__(1),
-	    objTransfer = __webpack_require__(2),
-	    _cookie = __webpack_require__(3),
-	    _localStorage = __webpack_require__(4),
-	    _sessionStorage = __webpack_require__(5);
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	    var base = __webpack_require__(1),
+	        objTransfer = __webpack_require__(2),
+	        cookie = __webpack_require__(3),
+	        localStorage = __webpack_require__(4),
+	        sessionStorage = __webpack_require__(5),
+	        URIParser = __webpack_require__(6);
 
-	  return {
-	    base: base,
-	    objTransfer: objTransfer,
-	    cookie: _cookie,
-	    localStorage: _localStorage,
-	    sessionStorage: _sessionStorage
-	  };
+	    return {
+	        base: base,
+	        objTransfer: objTransfer,
+	        cookie: cookie,
+	        localStorage: localStorage,
+	        sessionStorage: sessionStorage,
+	        URIParser:URIParser
+	    };
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
@@ -78,38 +80,77 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * Created by rubyisapm on 16/12/21.
+	 * @author rubyisapm
 	 */
 	!(module.exports = {
-	  upperCaseFirst:function(str){
-	    return str.replace(/^[a-z]/,function(firstLetter){
-	      return firstLetter.toUpperCase();
-	    })
-	  },
-	  lowerCaseFirst:function(str){
-	    return str.replace(/^[A-Z]/,function(firstLetter){
-	      return firstLetter.toLowerCase();
-	    })
-	  },
-	  isArray:function(val){
-	    return Object.prototype.toString.call(val)==='[object Array]';
-	  },
-	  isObject:function(val){
-	    return typeof val==='object' && !utility.base.isArray(val);
-	  },
-	  isStorageAvailable: function(type = 'localStorage') {
-	    try {
-	      let x = '__storage_test__',
-	        storage = window[ type ];
+	    /**
+	     * 将字符串的首字母大写
+	     * @param {string} str 原字符串
+	     * @returns {string} 转换后的字符串
+	     */
+	    upperCaseFirst: function (str) {
+	        str = str + '';
+	        return str.replace(/^[a-z]/, function (firstLetter) {
+	            return firstLetter.toUpperCase();
+	        })
+	    },
+	    /**
+	     * 将字符串的首字母小写
+	     * @param {string} str 原字符串
+	     * @returns {string} 转换后的字符串
+	     */
+	    lowerCaseFirst: function (str) {
+	        str = str + '';
+	        return str.replace(/^[A-Z]/, function (firstLetter) {
+	            return firstLetter.toLowerCase();
+	        })
+	    },
+	    /**
+	     * 判断一个值是不是数组
+	     * @param {*} val 要判断的值
+	     * @returns {boolean} 是否为数组
+	     */
+	    isArray: function (val) {
+	        return Object.prototype.toString.call(val) === '[object Array]';
+	    },
+	    /**
+	     * 判断一个值是不是对象
+	     * @param {*} val 要判断的值
+	     * @returns {boolean} 是否为数组
+	     */
+	    isObject: function (val) {
+	        return typeof val === 'object' && !utility.base.isArray(val);
+	    },
 
-	      storage.setItem( x, x );
-	      storage.removeItem( x );
+	    /**
+	     * 检测对象是否为空对象
+	     * @param {?Object} obj 要检测的对象，null会被检测为空对象
+	     * @returns {boolean}
+	     */
+	    isEmptyObject:function(obj){
+	        for(var i in obj){
+	            return false;
+	        }
+	        return true;
+	    },
 
-	      return true;
-	    } catch(e) {
-	      return false;
+
+	    /**
+	     * 判断浏览器是否支持storage
+	     * @param {string} type 'localStorage'/'sessionStorage'
+	     * @returns {boolean}
+	     */
+	    isStorageAvailable: function (type) {
+	        try {
+	            var x = '__storage_test__',
+	                storage = window[type];
+	            storage.setItem(x, x);
+	            storage.removeItem(x);
+	            return true;
+	        } catch (e) {
+	            return false;
+	        }
 	    }
-	  }
 	});
 
 /***/ },
@@ -117,10 +158,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/**
-	 * Created by rubyisapm on 16/12/21.
+	 * @author rubyisapm
 	 */
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function(){
 	  var base=__webpack_require__(1);
+
+	  /**
+	   * 按照给定的规则转换原对象中的key的格式
+	   * @param {Function} transfer 转换函数
+	   * @param {?Object} obj 原对象
+	   * @returns {?Object} obj 转换后的对象
+	   */
 	  function transferKeyInObj(transfer,obj){
 	    if(obj===null){
 	      return obj;
@@ -144,6 +192,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return newObj;
 	  }
 
+	  /**
+	   * 按照给定的规则转换原数组中的对象中的key的格式
+	   * @param {Function} transfer 转换函数
+	   * @param {Array} arr 原对象
+	   * @returns {?Object} obj 转换后的对象
+	   */
 	  function transferKeyInArray(transfer,arr){
 	    if(arr.length==0){
 	      return arr;
@@ -161,12 +215,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return newArray;
 	  }
 
-
-
 	  return {
+	    /**
+	     * 将原对象中的key的首字母大写
+	     * @param {?Object} obj 原对象
+	     * @returns {?Object} 转换后的对象
+	     */
 	    upperKey:function(obj){
 	      return transferKeyInObj(base.upperCaseFirst,obj);
 	    },
+	    /**
+	     * 将原对象中的key的首字母小写
+	     * @param {?Object} obj 原对象
+	     * @returns {?Object} 转换后的对象
+	     */
 	    lowerKey:function(obj){
 	      return transferKeyInObj(base.lowerCaseFirst,obj);
 	    }
@@ -303,23 +365,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * v1.0.0
-	 *
-	 * localStorage
-	 * 
-	 * Copyright 2016 Live
-	 * Licensed MIT
-	 * 
-	 * Date: 2016-12-08 11:13:29
+	 * @author liwei
 	 */
-
 
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 		'use strict';
 
-		let base = __webpack_require__(1);
+		var base = __webpack_require__(1);
 
-		const IS_LOCAL_STORAGE_AVAILABLE = base.isStorageAvailable( 'localStorage' );
+		var IS_LOCAL_STORAGE_AVAILABLE = base.isStorageAvailable( 'localStorage' );
 
 		/**
 		 * 设置一个 storage
@@ -328,7 +382,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		 */
 		function set( sKey, sValue ) {
 			if ( IS_LOCAL_STORAGE_AVAILABLE ) {
-
 				localStorage.setItem( sKey, sValue );
 			}
 		}
@@ -379,23 +432,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * v1.0.0
-	 *
-	 * sessionStorage
-	 * 
-	 * Copyright 2016 Live
-	 * Licensed MIT
-	 * 
-	 * Date: 2016-12-08 11:13:29
+	 * @author liwei
 	 */
 
 
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
 		'use strict';
 
-		let base = __webpack_require__(1);
+		var base = __webpack_require__(1);
 
-		const IS_SESSION_STORAGE_AVAILABLE = base.isStorageAvailable( 'sessionStorage' );
+		var IS_SESSION_STORAGE_AVAILABLE = base.isStorageAvailable( 'sessionStorage' );
 
 		/**
 		 * 设置一个 storage
@@ -449,6 +495,80 @@ return /******/ (function(modules) { // webpackBootstrap
 			remove: remove
 		};
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/**
+	 * @author rubyisapm
+	 */
+	!(__WEBPACK_AMD_DEFINE_RESULT__ = function(){
+	    var base=__webpack_require__(1);
+	    /**
+	     * 将查询字符串解析为查询参数数组
+	     * @param {string} search
+	     */
+	    function searchToParamGroup(search){
+	        var paramGroup={};
+	        if(search!==''){
+	            search.replace(/(([^=?&]+)=([^=&]*))/g,function($0,$1,$2,$3){
+	                paramGroup[$2]=$3;
+	            });
+	        }
+	        return paramGroup;
+	    }
+
+	    /**
+	     * URL解析并返回对应的参数
+	     * @param {string} uri uri
+	     * @returns {{protocol: *, hostname: *, port: *, pathname: *, search: *, hash: *, host: *}}
+	     */
+	    function uriParser(uri){
+	        var parser = document.createElement('a');
+	        parser.href = uri;
+	        return {
+	            protocol:parser.protocol,
+	            hostname:parser.hostname,
+	            port:parser.port,
+	            pathname:parser.pathname,
+	            search:parser.search,
+	            hash:parser.hash,
+	            host:parser.host
+	        };
+	    }
+
+	    /**
+	     * 获取url中指定参数的值
+	     * @param {string} uri 要解析的url
+	     * @param {string} param 要获取的查询参数的key值
+	     * @returns {undefined | string}
+	     */
+	    function getParam(uri,param){
+	        var paramGroup=searchToParamGroup(uriParser(uri).search);
+	        if(!base.isEmptyObject(paramGroup)){
+	            return paramGroup[param];
+	        }
+	    }
+
+	    /**
+	     * 获取url中的参数集合
+	     * @param {string} uri 要解析的url
+	     * @returns {object}
+	     */
+	    function getParamGroup(uri){
+	        return searchToParamGroup(uriParser(uri).search);
+	    }
+
+
+	    return{
+	        uriParser:uriParser,
+	        getParamGroup:getParamGroup,
+	        getParam:getParam,
+	        searchToParamGroup:searchToParamGroup
+	    };
+	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
 
 /***/ }
 /******/ ])

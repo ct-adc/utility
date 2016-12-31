@@ -1,5 +1,5 @@
 /**
- * Created by rubyisapm on 16/12/21.
+ * @author rubyisapm
  */
 define(function(){
   var base=require('./base');
