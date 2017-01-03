@@ -8,7 +8,8 @@ IE 10+ / chrome
 
 ## 安装
 
-```npm install ct-utility
+```
+npm install ct-utility
 ```
 
 
