@@ -91,11 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  isObject:function(val){
 	    return typeof val==='object' && !utility.base.isArray(val);
-	  },
-	  //将字符串转化为数字
-	  toInt: function(str){
-	    return parseInt(str, 10) || 0;
-	  },
+	  }
 	});
 
 /***/ },
@@ -164,29 +160,37 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/**
-	 * Created by wx-wangxiang on 16/12/23.
+	 * Created by wx-wangxiang on 17/01/03.
 	 */
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
-		var base = __webpack_require__(1),
-			DATE_FORMATS = {
-			yyyy: dateGetter("FullYear", 4),
-			yy: dateGetter("FullYear", 2, 0, true),
-			y: dateGetter("FullYear", 1),
-			MM: dateGetter("Month", 2, 1),
-		  	M: dateGetter("Month", 1, 1),
-		  	dd: dateGetter("Date", 2),
-		  	d: dateGetter("Date", 1),
-		  	HH: dateGetter("Hours", 2),
-		  	H: dateGetter("Hours", 1),
-		  	hh: dateGetter("Hours", 2, -12),
-		  	h: dateGetter("Hours", 1, -12),
-		  	mm: dateGetter("Minutes", 2),
-		  	m: dateGetter("Minutes", 1),
-		  	ss: dateGetter("Seconds", 2),
-		  	s: dateGetter("Seconds", 1),
-		},
+		var numberFormat = __webpack_require__(4),
 			rdateFormat = /((?:[^yMdHhmsaZE']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|d+|H+|h+|m+|s+|a|Z))(.*)/,
-			raspnetjson = /^\/Date\((\d+)\)\/$/;
+	    	raspnetjson = /^\/Date\((\d+)\)\/$/, //匹配 /Date(12345)/ 类型的字符串
+			DATE_FORMATS = {
+			yyyy: dateGetter("FullYear", 4), //对年份进行四位数的显示 如：2017/01/06
+			yy: dateGetter("FullYear", 2, 0, true), //对年份进行两位数的显示 如：17/01/06
+			y: dateGetter("FullYear", 1), //年份的一般的显示 如：2017/01/06
+			MM: dateGetter("Month", 2, 1), //对于月份的单个数字会进行补零, 如：2017/01/06
+		  	M: dateGetter("Month", 1, 1), //对于月份的单个数字不会进行补零, 如：2017/1/06
+		  	dd: dateGetter("Date", 2), //对于日期的单个数字会进行补零, 如：2017/01/06
+		  	d: dateGetter("Date", 1), //对于日期的单个数字不会补零, 如：2017/01/6
+		  	HH: dateGetter("Hours", 2), //对于小时的单个数字会进行补零,并且是24小时制 如：2017/01/06 08:01
+		  	H: dateGetter("Hours", 1), //对于小时的单个数字不会进行补零,并且是24小时制 如：2017/01/06 8:01
+		  	hh: dateGetter("Hours", 2, -12), //对于小时的单个数字会进行补零,并且是12小时制 如：2017/01/06 08:01
+		  	h: dateGetter("Hours", 1, -12), //对于小时的单个数字不会进行补零,并且是12小时制 如：2017/01/06 8:01
+		  	mm: dateGetter("Minutes", 2), //对于分钟的单个数字会进行补零 如：2017/03/06 08:01
+		  	m: dateGetter("Minutes", 1), //对于分钟的单个数字不会进行补零 如：2017/03/06 08:1
+		  	ss: dateGetter("Seconds", 2), //对于秒数的单个数字会进行补零 如：2017/03/06 08:01:09
+		  	s: dateGetter("Seconds", 1), //对于秒数的单个数字会进行补零 如：2017/03/06 08:01:9
+		};
+		/**
+		 * 根据不同的日期format,获取相应的年，月，日，时，分，秒的显示格式
+		 * @param  {string} name   函数通过该参数执行不同的时间操作的方法
+		 * @param  {int} size   日期显示的位数
+		 * @param  {int} offset 时间显示的格式，12小时制还是24小时制(用于小时的显示)
+		 * @param  {boolean} trim   用于年份的两位数的显示
+		 * @return {Function}        返回数字格式化方法
+		 */
 		function dateGetter(name, size, offset, trim) {
 		    return function (date) {
 			    var value = date["get" + name]();
@@ -199,21 +203,31 @@ return /******/ (function(modules) { // webpackBootstrap
 			    return padNumber(value, size, trim);
 			}
 		}
+		/**
+		 * 数字格式化
+		 * @param  {int} num    获得的日期
+		 * @param  {[type]} digits 日期要显示的位数
+		 * @param  {boolean} trim   年份是否是两位数显示
+		 * @return {string}        返回格式化后的数字
+		 */
 		function padNumber(num, digits, trim) {
 			var neg = '';
 			if (num < 0) {
 			    neg = '-';
 			    num = -num;
 			}
-			num = '' + num;
-			while (num.length < digits) {
-			    num = '0' + num;
-			}
+			num = numberFormat.zeroFill(num, digits); //补零操作
 			if (trim){
 			    num = num.substr(num.length - digits);
 			}
 			return neg + num;
 		}
+		/**
+		 * 日期格式化
+		 * @param  {obj} date   日期对象
+		 * @param  {string} format 格式化的方式
+		 * @return {string}        格式化后的日期
+		 */
 		function dateFilter(date, format) {
 			var text = "",
 			    parts = [],
@@ -221,48 +235,12 @@ return /******/ (function(modules) { // webpackBootstrap
 			format = format || "yyyy-M-d";
 			if (typeof date === "string") {
 			    if (/^\d+$/.test(date)) {
-			      	date = base.toInt(date);
-			    } else if (raspnetjson.test(date)) {
-			      	date = +RegExp.$1;
+			      	date = numberFormat.toInt(date);
+			    } else if (raspnetjson.test(date)) { //匹配 '/Date(1483410908227)/' 类型的字符串
+			      	date = +RegExp.$1; //RegExp.$1 表示前面raspnetjson.test()匹配到的第一个括号中的内容
 			    } else {
-			      	var trimDate = date.trim();
-			      	var dateArray = [0, 0, 0, 0, 0, 0, 0];
-			      	var oDate = new Date(0);
-			      //取得年月日
-			      	trimDate = trimDate.replace(/^(\d+)\D(\d+)\D(\d+)/, function (_, a, b, c) {
-			        	var array = c.length === 4 ? [c, a, b] : [a, b, c];
-			        	dateArray[0] = base.toInt(array[0]);    //年
-			        	dateArray[1] = base.toInt(array[1]) - 1; //月
-			        	dateArray[2] = base.toInt(array[2]);     //日
-			        	return "";
-			      	});
-			      	var dateSetter = oDate.setFullYear;
-			      	var timeSetter = oDate.setHours;
-			      	trimDate = trimDate.replace(/[T\s](\d+):(\d+):?(\d+)?\.?(\d)?/, function (_, a, b, c, d) {
-			        	dateArray[3] = base.toInt(a); //小时
-			        	dateArray[4] = base.toInt(b); //分钟
-			        	dateArray[5] = base.toInt(c); //秒
-			        	if (d) {                //毫秒
-			         		dateArray[6] = Math.round(parseFloat("0." + d) * 1000);
-			        	}
-			        	return "";
-			      	});
-			      	var tzHour = 0;
-			      	var tzMin = 0;
-			      	trimDate = trimDate.replace(/Z|([+-])(\d\d):?(\d\d)/, function (z, symbol, c, d) {
-			        	dateSetter = oDate.setUTCFullYear;
-			        	timeSetter = oDate.setUTCHours;
-			        	if (symbol) {
-			         		tzHour = base.toInt(symbol + c);
-			          		tzMin = base.toInt(symbol + d);
-			        	}
-			        	return '';
-			      	});
-			      	dateArray[3] -= tzHour;
-			      	dateArray[4] -= tzMin;
-			      	dateSetter.apply(oDate, dateArray.slice(0, 3));
-			      	timeSetter.apply(oDate, dateArray.slice(3));
-			      	date = oDate;
+			      	console.error('请输入合法的日期');
+			      	return;
 			    }
 			};
 			if (typeof date === 'number') {
@@ -288,6 +266,33 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		return dateFilter
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Created by wx-wangxiang on 17/01/03.
+	 */
+	!(module.exports = {
+		//将字符串转化为数字
+		toInt: function(str){
+		    return parseInt(str, 10) || 0;
+		},
+		/**
+		 * 补零操作
+		 * @param  {int} num    需要进行补零操作的参数
+		 * @param  {int} digits 想要拓展的位数
+		 * @return {string}     补零操作后的数字
+		 */
+		zeroFill: function(num, digits) {
+			var num = '' + num; //将数字转为字符串的简便方法，同样的如果将数字字符串转为数字可以在其前面加上"+"号
+			while(num.length < digits) {
+				num = '0' + num;
+			}
+			return num;
+		}
+	})
 
 /***/ }
 /******/ ])
