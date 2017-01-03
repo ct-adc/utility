@@ -56,6 +56,33 @@ define(function(){
     return newArray;
   }
 
+  /**
+   * 去除对象中某些属性值的前后空格
+   * @param {object} obj 原对象
+   * @param {array} keys 要修改的key，支持以.分隔的串联属性如app.id
+   * @returns {*} 处理后的对象
+   */
+  function trimSome(obj,keys){
+    var objClone=JSON.parse(JSON.stringify(obj));
+    keys.map(function(key){
+      if(/\./.test(key)){
+        var target=objClone;
+        keys=key.split('.');
+        keys.map(function(key,index,arr){
+          if(index===arr.length-1){
+            target[key]=target[key].replace(/(^\s*|\s*$)/g,'')
+          }else{
+            target=target[key];
+          }
+        });
+      }else{
+        objClone[key]=objClone[key].replace(/(^\s*|\s*$)/g,'');
+      }
+    });
+    return objClone;
+  }
+
+
   return {
     /**
      * 将原对象中的key的首字母大写
@@ -72,6 +99,7 @@ define(function(){
      */
     lowerKey:function(obj){
       return transferKeyInObj(base.lowerCaseFirst,obj);
-    }
+    },
+    trimSome:trimSome
   }
 });

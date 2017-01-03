@@ -1,11 +1,5 @@
-/*!
- * v1.0.0
- *
- * localStorage
- * 
- * Copyright https://developer.mozilla.org/zh-CN/docs/Web/API/Document/cookie
- * 
- * Date: 2016-12-23 16:27:00
+/**
+ * @author liwei
  */
 
 

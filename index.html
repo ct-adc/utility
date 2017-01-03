@@ -84,6 +84,10 @@
 
     console.log(utility.dateFilter(+new Date(), 'y/MM/dd hh:mm:ss'));
     console.log(utility.dateFilter('1483410908227', 'yyyy/MM/dd hh:mm:ss'));
+
+
+    console.log(utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['age.n']))
+    console.log(utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['name','age.n']))
 </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /**
- * Created by wx-wangxiang on 17/01/03.
+ * @author wangxiang
  */
 define(function() {
 	var numberFormat = require('./numberFormat'),

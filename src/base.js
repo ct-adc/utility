@@ -30,7 +30,7 @@ define({
      * @returns {boolean} 是否为数组
      */
     isArray: function (val) {
-        return Object.prototype.toString.call(val) === '[object Array]';
+        return Array.isArray(val);
     },
     /**
      * 判断一个值是不是对象
@@ -40,7 +40,6 @@ define({
     isObject: function (val) {
         return typeof val === 'object' && !utility.base.isArray(val);
     },
-
     /**
      * 检测对象是否为空对象
      * @param {?Object} obj 要检测的对象，null会被检测为空对象
@@ -52,8 +51,6 @@ define({
         }
         return true;
     },
-
-
     /**
      * 判断浏览器是否支持storage
      * @param {string} type 'localStorage'/'sessionStorage'

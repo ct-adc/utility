@@ -4,12 +4,13 @@
 var webpack=require('webpack');
 module.exports = {
   entry: {
-    index: './src/index'
+    index: './index'
   },
   output: {
     path: './asset',
     filename: 'utility.js',
     libraryTarget:'umd',
     library:'utility'
-  }
+  },
+  devtool:'eval'
 };
