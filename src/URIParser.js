@@ -10,7 +10,7 @@ define(function(){
     function searchToParamGroup(search){
         var paramGroup={};
         if(search!==''){
-            search.replace(/(([^=?&]+)=([^=&]*))/g,function($0,$1,$2,$3){
+            search.replace(/(\?|&|\b)(([^=?&]+)=([^=&]*))/g,function(_,_,$1,$2,$3){
                 paramGroup[$2]=$3;
             });
         }
