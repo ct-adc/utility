@@ -40,6 +40,16 @@ define({
     isObject: function (val) {
         return typeof val === 'object' && !utility.base.isArray(val);
     },
+
+    isJSON:function(val){
+        try{
+            var result=JSON.parse(val);
+            return typeof result==='object';
+        }catch(e){
+            return false;
+        }
+    },
+
     /**
      * 检测对象是否为空对象
      * @param {?Object} obj 要检测的对象，null会被检测为空对象

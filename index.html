@@ -12,16 +12,19 @@
     var obj1={
         name:1,
         age:1,
-        hobbies:[{name:'music'},{name:'snowboarding'},{name:'skydiving'}]
+        hobbies:[{name:'music'},{name:'snowboarding'},{name:'skydiving'}],
+        jsonS:'{"name":"music"}',
+        jsonS2:'[{"name":"music"},{"name":"music"}]'
     };
-    console.log(utility.objTransfer.upperKey(obj1));
+    console.log(utility.objTransfer.upperKey(obj1,true));
 
     var obj2={
         Name:1,
         Age:1,
-        Hobbies:[{Name:'music'},{Name:'snowboarding'},{Name:'skydiving'}]
+        Hobbies:[{Name:'music'},{Name:'snowboarding'},{Name:'skydiving'}],
+        JsonS2:'[{"Name":"music"},{"Name":"music","Age":{"Name":"music"}}]'
     };
-    console.log(utility.objTransfer.lowerKey(obj2));
+    console.log(utility.objTransfer.lowerKey(obj2,true));
 
 // Storage test
     console.log( '--- storage test start ---' );
@@ -88,6 +91,9 @@
 
     console.log(utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['age.n']))
     console.log(utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['name','age.n']))
+
+
+
 </script>
 </body>
 </html>
