@@ -38,7 +38,7 @@ define({
      * @returns {boolean} 是否为数组
      */
     isObject: function (val) {
-        return typeof val === 'object' && !utility.base.isArray(val);
+        return typeof val === 'object' && !this.isArray(val);
     },
 
     isJSON:function(val){
