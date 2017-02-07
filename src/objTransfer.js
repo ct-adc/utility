@@ -51,7 +51,7 @@ define(function(){
         newArray[index]=transferKeyInArray(transfer,item,jsonTransfer);
       }else if(base.isObject(item)){
         newArray[index]=transferKeyInObj(transfer,item,jsonTransfer);
-      }else if(base.isJSON(val) && jsonTransfer){
+      }else if(base.isJSON(item) && jsonTransfer){
         newArray[index]=JSON.stringify(transferKeyInJSON(transfer,item,jsonTransfer));
       }else{
         newArray[index]=item;
