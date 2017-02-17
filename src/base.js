@@ -25,6 +25,14 @@ define({
         })
     },
     /**
+     * 判断一个值是不是window对象
+     * @param obj
+     * @returns {boolean}
+     */
+    isWindow: function (obj) {
+        return obj != null && obj === obj.window;
+    },
+    /**
      * 判断一个值是不是数组
      * @param {*} val 要判断的值
      * @returns {boolean} 是否为数组
@@ -40,14 +48,99 @@ define({
     isObject: function (val) {
         return typeof val === 'object' && !this.isArray(val);
     },
-
-    isJSON:function(val){
-        try{
-            var result=JSON.parse(val);
-            return typeof result==='object';
-        }catch(e){
+    /**
+     * 判断一个值是不是纯文本对象
+     * 即其属性不是对象/dom节点/window
+     * @param obj
+     * @returns {boolean}
+     */
+    isPlainObject: function (obj) {
+        if (!this.isObject(obj) || obj.nodeType || this.isWindow(obj)) {
             return false;
         }
+        if (obj.constructor && !obj.constructor.prototype.hasOwnProperty('isPrototypeOf')) {
+            return false;
+        }
+        return true;
+    },
+    isJSON: function (val) {
+        try {
+            var result = JSON.parse(val);
+            return typeof result === 'object';
+        } catch (e) {
+            return false;
+        }
+    },
+    isFunction: function (val) {
+        return typeof val === 'function';
+    },
+
+    extend: function () {
+        var options, name, src, copy, copyIsArray, clone,
+            target = arguments[0] || {},
+            i = 1,
+            length = arguments.length,
+            deep = false;
+
+        // Handle a deep copy situation
+        if (typeof target === "boolean") {
+            deep = target;
+
+            // Skip the boolean and the target
+            target = arguments[i] || {};
+            i++;
+        }
+
+        // Handle case when target is a string or something (possible in deep copy)
+        if (!this.isObject(target) && !this.isFunction(target)) {
+            target = {};
+        }
+
+        // Extend jQuery itself if only one argument is passed
+        if (i === length) {
+            target = this;
+            i--;
+        }
+
+        for (; i < length; i++) {
+
+            // Only deal with non-null/undefined values
+            if (( options = arguments[i] ) != null) {
+
+                // Extend the base object
+                for (name in options) {
+                    src = target[name];
+                    copy = options[name];
+
+                    // Prevent never-ending loop
+                    if (target === copy) {
+                        continue;
+                    }
+
+                    // Recurse if we're merging plain objects or arrays
+                    if (deep && copy && ( this.isPlainObject(copy) ||
+                        ( copyIsArray = this.isArray(copy) ) )) {
+
+                        if (copyIsArray) {
+                            copyIsArray = false;
+                            clone = src && this.isArray(src) ? src : [];
+
+                        } else {
+                            clone = src && this.isPlainObject(src) ? src : {};
+                        }
+
+                        // Never move original objects, clone them
+                        target[name] = this.extend(deep, clone, copy);
+
+                        // Don't bring in undefined values
+                    } else if (copy !== undefined) {
+                        target[name] = copy;
+                    }
+                }
+            }
+        }
+        // Return the modified object
+        return target;
     },
 
     /**
@@ -55,8 +148,8 @@ define({
      * @param {?Object} obj 要检测的对象，null会被检测为空对象
      * @returns {boolean}
      */
-    isEmptyObject:function(obj){
-        for(var i in obj){
+    isEmptyObject: function (obj) {
+        for (var i in obj) {
             return false;
         }
         return true;

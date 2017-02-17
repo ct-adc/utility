@@ -93,6 +93,21 @@
     console.log(utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['name','age.n']))
 
 
+    var object1 = {
+        apple: 0,
+        banana: { weight: 52, price: 100 },
+        cherry: 97
+    };
+    var object2 = {
+        banana: { price: 200 },
+        durian: 100
+    };
+    console.log(utility.base.extend(true,object1,object2));
+    console.log(utility.base.extend(false,object1,object2));
+
+
+
+
 
 </script>
 </body>
