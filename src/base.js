@@ -175,7 +175,7 @@ define({
 
     getObjValByKey: function (obj, key) {
         key = key.split('.');
-        var result = data;
+        var result = obj;
         key.map(function (item) {
             result = result[item];
         });
