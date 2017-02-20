@@ -63,6 +63,11 @@ define({
         }
         return true;
     },
+    /**
+     * 判断一个值是不是JSON
+     * @param val
+     * @returns {boolean}
+     */
     isJSON: function (val) {
         try {
             var result = JSON.parse(val);
@@ -71,8 +76,21 @@ define({
             return false;
         }
     },
+    /**
+     * 判断一个值是不是函数
+     * @param val
+     * @returns {boolean}
+     */
     isFunction: function (val) {
         return typeof val === 'function';
+    },
+    /**
+     * 判断一个值是不是正则表达式
+     * @param obj
+     * @returns {boolean}
+     */
+    isRegExp: function (obj) {
+        return Object.prototype.toString.call(obj) === "[object RegExp]";
     },
 
     extend: function () {
@@ -154,6 +172,15 @@ define({
         }
         return true;
     },
+
+    getObjValByKey: function (obj, key) {
+        key = key.split('.');
+        var result = data;
+        key.map(function (item) {
+            result = result[item];
+        });
+        return result;
+    },
     /**
      * 判断浏览器是否支持storage
      * @param {string} type 'localStorage'/'sessionStorage'
@@ -170,4 +197,5 @@ define({
             return false;
         }
     }
-});
+})
+;
