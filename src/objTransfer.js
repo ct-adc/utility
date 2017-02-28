@@ -111,7 +111,11 @@ define(function(){
      * @returns {?Object} 转换后的对象
      */
     upperKey:function(obj,jsonTransfer){
-      return transferKeyInObj(base.upperCaseFirst,obj,jsonTransfer);
+      if(base.isArray(obj)){
+        return transferKeyInArray(base.upperCaseFirst,obj,jsonTransfer);
+      }else{
+        return transferKeyInObj(base.upperCaseFirst,obj,jsonTransfer);
+      }
     },
     /**
      * 将原对象中的key的首字母小写
@@ -119,7 +123,11 @@ define(function(){
      * @returns {?Object} 转换后的对象
      */
     lowerKey:function(obj,jsonTransfer){
-      return transferKeyInObj(base.lowerCaseFirst,obj,jsonTransfer);
+      if(base.isArray(obj)){
+        return transferKeyInArray(base.lowerCaseFirst,obj,jsonTransfer);
+      }else{
+        return transferKeyInObj(base.lowerCaseFirst,obj,jsonTransfer);
+      }
     },
     trimSome:trimSome
   }
