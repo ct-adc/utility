@@ -8,14 +8,22 @@ define({
      * @returns {number}
      */
     getByteLen: function (str) {
-        var len = 0;
-        for (var i = 0; i < str.length; i++) {
-            if (str[i].match(/[^x00-xff]/ig) != null) //全角
-                len += 2;
-            else
-                len += 1;
+        var str1=str.replace(/([^\x00-\xff])/ig,'$1 ');
+        return str1.length;
+    },
+    /**
+     * 按字节截取内容
+     * @param source 原字符串
+     * @param length 要截取的长度
+     * @param halfCut 是否要舍弃半个中文
+     * @returns {string}
+     */
+    subByte: function (source,length,halfCut) {
+        var sliced=(source + '').substr(0, length).replace(/([^\x00-\xff])/g, '$1 ').substr(0, length).replace(/([^\x00-\xff]) /g, '$1');
+        if(halfCut && this.getByteLen(sliced)>length){
+            sliced=sliced.substr(0,sliced.length-1);
         }
-        return len;
+        return sliced;
     },
     /**
      * 将字符串的首字母大写
