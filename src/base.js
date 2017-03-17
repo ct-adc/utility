@@ -3,6 +3,21 @@
  */
 define({
     /**
+     * 获取字符串的字节长度
+     * @param str
+     * @returns {number}
+     */
+    getByteLen: function (str) {
+        var len = 0;
+        for (var i = 0; i < str.length; i++) {
+            if (str[i].match(/[^x00-xff]/ig) != null) //全角
+                len += 2;
+            else
+                len += 1;
+        }
+        return len;
+    },
+    /**
      * 将字符串的首字母大写
      * @param {string} str 原字符串
      * @returns {string} 转换后的字符串
