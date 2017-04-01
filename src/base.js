@@ -133,7 +133,7 @@ define({
         }
 
         // Handle case when target is a string or something (possible in deep copy)
-        if (typeof target!=='object' && !this.isFunction(target)) {
+        if (typeof target !== "object" && !this.isFunction(target)) {
             target = {};
         }
 
