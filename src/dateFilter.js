@@ -77,11 +77,15 @@ define(function() {
 		      	date = numberFormat.toInt(date);
 		    } else if (raspnetjson.test(date)) { //匹配 '/Date(1483410908227)/' 类型的字符串
 		      	date = +RegExp.$1; //RegExp.$1 表示前面raspnetjson.test()匹配到的第一个括号中的内容
-		    } else {
+		    } else if(/^\d{4}\D*\d{2}\D*\d{2}$/.test(date)){
+				date=new Date(date)-8*3600*1000;
+			}else if(/^\d{4}\D*\d{2}\D*\d{2} \d{2}:\d{2}:\d{2}$/.test(date)){
+				date=new Date(date);
+			}else{
 		      	console.error('请输入合法的日期');
 		      	return;
 		    }
-		};
+		}
 		if (typeof date === 'number') {
 		    date = new Date(date);
 		}
