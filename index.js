@@ -9,7 +9,8 @@ define(function () {
         sessionStorage = require('./src/sessionStorage'),
         URIParser = require('./src/URIParser'),
         numberFormat=require('./src/numberFormat'),
-        dateFilter=require('./src/dateFilter');
+        dateFilter=require('./src/dateFilter'),
+        INFO=require('./src/info');
 
     return {
         base: base,
@@ -19,6 +20,7 @@ define(function () {
         sessionStorage: sessionStorage,
         URIParser:URIParser,
         numberFormat:numberFormat,
-        dateFilter:dateFilter
+        dateFilter:dateFilter,
+        INFO:INFO
     };
 });
