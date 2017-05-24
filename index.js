@@ -8,9 +8,10 @@ define(function () {
         localStorage = require('./src/localStorage'),
         sessionStorage = require('./src/sessionStorage'),
         URIParser = require('./src/URIParser'),
-        numberFormat=require('./src/numberFormat'),
-        dateFilter=require('./src/dateFilter'),
-        INFO=require('./src/info');
+        numberFormat = require('./src/numberFormat'),
+        dateFilter = require('./src/dateFilter'),
+        areaDataFormat = require('./src/areaDataFormat'),
+        INFO = require('./src/info');
 
     return {
         base: base,
@@ -18,9 +19,10 @@ define(function () {
         cookie: cookie,
         localStorage: localStorage,
         sessionStorage: sessionStorage,
-        URIParser:URIParser,
-        numberFormat:numberFormat,
-        dateFilter:dateFilter,
-        INFO:INFO
+        URIParser: URIParser,
+        numberFormat: numberFormat,
+        dateFilter: dateFilter,
+        areaDataFormat:areaDataFormat,
+        INFO: INFO
     };
 });

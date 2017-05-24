@@ -196,6 +196,12 @@ define({
         return true;
     },
 
+    /**
+     * 获取一个对象中具体key[组]的值，原样输出，如果为引用类型则保持引用
+     * @param {Object|Array} obj 对象
+     * @param {String} key key[组]
+     * @returns {*} key[组]对应的值
+     */
     getObjValByKey: function (obj, key) {
         key = key.split('.');
         var result = obj;
@@ -204,6 +210,85 @@ define({
         });
         return result;
     },
+    /**
+     * 设置一个对象中具体key[组]的值，可以为具体的值或者处理方法
+     * @param {Object} obj 对象
+     * @param {String} key key[组]
+     * @param {*} valOrFn 设置的值或者处理方法(方法接受两个参数:key所在的对象，最后的key)
+     * @returns {*}
+     */
+    setObjValByKey:function(obj,key,valOrFn){
+        var that=this;
+        key = key.split('.');
+        var result={},
+            targetClone = JSON.parse(JSON.stringify(obj)),
+            pointer=[targetClone];
+        //targetClone用于逐渐定位至目标key
+        if(typeof that.setObjValByKey.$rules==='undefined'){
+            //内置规则
+            that.setObjValByKey.$rules= {
+                '$null2str':function(obj,key){
+                    if(obj[key]===null){
+                        obj[key]='';
+                    }
+                },// null -> ''
+                '$null2zero':function(obj,key){
+                    if(obj[key]===null){
+                        obj[key]=0;
+                    }
+                },// null -> 0
+                '$null2arr':function(obj,key){
+                    if(obj[key]===null){
+                        obj[key]=[];
+                    }
+                },// null -> []
+                '$null2obj':function(obj,key){
+                    if(obj[key]===null){
+                        obj[key]={};
+                    }
+                },// null -> {}
+                '$empty2zero-strict':function(obj,key){
+                    if(obj[key]===''){
+                        obj[key]=0;
+                    }
+                },// '' -> 0
+                '$empty2zero-relaxed':function(obj,key){
+                    if(/^\s*$/.test(obj[key])){
+                        obj[key]=0;
+                    }
+                },// '  ' || '' -> 0
+                '$trim':function(obj,key){
+                    if(typeof obj[key]==='string'){
+                        obj[key]=obj[key].replace(/(^\s*|\s*$)/g, '');
+                    }
+                }// 去掉前后空格
+            };
+        }
+
+        key.map(function (key,index,arr) {
+            if(index===arr.length-1 && typeof pointer[pointer.length-1]!=='undefined'){
+                if(!that.isObject(pointer[pointer.length-1])){
+                    console.log('warning from ct-ct-utility:setObjValBykey中key所属的不是一个对象(你可能正在给非对象添加属性!)');
+                }
+                if(typeof valOrFn==='function'){
+                    valOrFn(pointer[pointer.length-1],key);
+                }else if(typeof valOrFn==='string' && valOrFn.indexOf('$')===0 && typeof that.setObjValByKey.$rules[valOrFn] !=='undefined'){
+                    //当匹配到内置规则时，使用内置规则对目标值做转换
+                    that.setObjValByKey.$rules[valOrFn](pointer[pointer.length-1],key);
+                }else{
+                    pointer[pointer.length-1][key]=valOrFn;
+                }
+            }else{
+                if(typeof pointer[pointer.length-1][key]!=='undefined'){
+                    pointer.push(pointer[pointer.length-1][key]);
+                }
+            }
+        });
+        //在原对象中更新targetClone对目标key的变化
+        this.extend(true,result,obj,targetClone);
+        return result;
+    },
+
     /**
      * 判断浏览器是否支持storage
      * @param {string} type 'localStorage'/'sessionStorage'

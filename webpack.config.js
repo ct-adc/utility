@@ -7,10 +7,10 @@ module.exports = {
     index: './index'
   },
   output: {
-    path: './asset',
+    path: './lib',
     filename: 'utility.js',
     libraryTarget:'umd',
-    library:'utility'
+    library:'ct-adc-utility'
   },
   devtool:'eval'
 };

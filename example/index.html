@@ -7,8 +7,10 @@
     <link href="http://static.uc108.com/cdn/bootstrap/3.3.5/css/theme.css" rel="stylesheet">
 </head>
 <body>
-<script src="asset/utility.js"></script>
+<script src="../lib/utility.js"></script>
+<script src="http://static.tcy365.com/cdn/component/area/2.0.0/area.min.js"></script>
 <script>
+    var utility=window['ct-adc-utility'];
     var obj1={
         name:1,
         age:1,
@@ -89,8 +91,8 @@
     console.log(utility.dateFilter('1483410908227', 'yyyy/MM/dd hh:mm:ss'));
 
 
-    console.log(utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['age.n']))
-    console.log(utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['name','age.n']))
+    console.log('trimSome',utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['age.n']))
+    console.log('trimSome',utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['name','age.n']))
 
 
     var object1 = {
@@ -110,6 +112,49 @@
     console.log(utility.dateFilter('2010-01-01 10:00:00','yyyy/MM/dd HH:mm:ss'));
 
     console.log(utility.INFO)
+
+    console.log(utility.areaDataFormat.areaTransfer())
+
+    console.log(utility.areaDataFormat.areaType('浙江'));
+    console.log(utility.areaDataFormat.areaType('0601'));
+
+    console.log(utility.areaDataFormat.getAreaIdByName('浙江-杭州'));
+    console.log(utility.areaDataFormat.getAreaNameById('0601'));
+
+    var object3={
+        name:null,
+        age:null,
+        hobby:null,
+        n:'',
+        m:0,
+        o:{
+            v:null,
+            w:'   ',
+            m:0
+        },
+        t:'   efjie   jfief    '
+    };
+    console.log(utility.objTransfer.transferSome(object3,[
+        {
+            keys:['name','o.v'],
+            rule:'$null2str'
+        },{
+            keys:['age'],
+            rule:'$null2zero'
+        },{
+            keys:['hobby'],
+            rule:'$null2arr'
+        },{
+            keys:['n'],
+            rule:'$empty2zero-strict'
+        },{
+            keys:['o.w'],
+            rule:'$empty2zero-relaxed'
+        },{
+            keys:['t'],
+            rule:'$trim'
+        }
+    ]))
 
 </script>
 </body>
