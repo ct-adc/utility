@@ -65,13 +65,13 @@ define({
         var provinceId = id.substr(0, 2),
             cityId = id.length > 2 ? id.substr(0, 4) : '',
             regionId = id.length > 4 ? id.substr(0, 6) : '',
-            provinceName = provinceId !== '' ? AREA.province.filter((item)=> {
+            provinceName = provinceId !== '' ? AREA.province.filter(function(item) {
                 return item.ID === provinceId;
             })[0].Name : '',
-            cityName = cityId !== '' ? AREA.city[provinceName].filter((item)=> {
+            cityName = cityId !== '' ? AREA.city[provinceName].filter(function(item) {
                 return item.ID === cityId;
             })[0].Name : '',
-            regionName = regionId !== '' ? AREA.region[cityName].filter((item)=> {
+            regionName = regionId !== '' ? AREA.region[cityName].filter(function(item) {
                 return item.ID === regionId;
             })[0].Name : '';
 

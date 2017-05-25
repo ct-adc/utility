@@ -8,7 +8,7 @@ module.exports = {
   },
   output: {
     path: './lib',
-    filename: 'utility.js',
+    filename: '[name].js',
     libraryTarget:'umd',
     library:'ct-utility'
   },
