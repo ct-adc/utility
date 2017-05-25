@@ -10,7 +10,7 @@ module.exports = {
     path: './lib',
     filename: 'utility.js',
     libraryTarget:'umd',
-    library:'ct-adc-utility'
+    library:'ct-utility'
   },
   devtool:'eval'
 };

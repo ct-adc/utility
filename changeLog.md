@@ -1,5 +1,10 @@
 ## 更新日志
 
+### 0.2.1
+
+*2017-05-25*
+
+- 修复 将lib/utility.js中的ct-adc-utility改为ct-utility
 
 ### 0.2.0
 
