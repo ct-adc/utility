@@ -25,6 +25,6 @@ define(function () {
         dateFilter: dateFilter,
         areaDataFormat:areaDataFormat,
         INFO: INFO,
-        scrollbar
+        scrollbar: scrollbar
     };
 });
