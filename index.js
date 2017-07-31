@@ -11,7 +11,8 @@ define(function () {
         numberFormat = require('./src/numberFormat'),
         dateFilter = require('./src/dateFilter'),
         areaDataFormat = require('./src/areaDataFormat'),
-        INFO = require('./src/info');
+        INFO = require('./src/info'),
+        scrollbar = require('./src/scrollbar');
 
     return {
         base: base,
@@ -23,6 +24,7 @@ define(function () {
         numberFormat: numberFormat,
         dateFilter: dateFilter,
         areaDataFormat:areaDataFormat,
-        INFO: INFO
+        INFO: INFO,
+        scrollbar
     };
 });

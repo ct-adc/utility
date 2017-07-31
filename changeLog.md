@@ -1,5 +1,12 @@
 ## 更新日志
 
+### 0.2.3
+
+*2017-07-31*
+
+- 新增 numberFormat 新增 split 方法，split(num, len, sep)。split(1234.56) => 1,234.56
+- 新增 scrollbar，目前就一个获取滚动条宽度的方法 getWidth
+
 ### 0.2.2
 
 *2017-05-25*

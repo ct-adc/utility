@@ -10,7 +10,7 @@
 <script src="../lib/index.js"></script>
 <script src="http://static.tcy365.com/cdn/component/area/2.0.0/area.min.js"></script>
 <script>
-    var utility=window['ct-adc-utility'];
+    var utility=window['ct-utility'];
     var obj1={
         name:1,
         age:1,
@@ -154,7 +154,12 @@
             keys:['t'],
             rule:'$trim'
         }
-    ]))
+    ]));
+
+
+    console.log('scrollbarWidth = ' + utility.scrollbar.getWidth() + 'px');
+
+    console.log('12345.678  =>  ' + utility.numberFormat.split(12345.678, 4));
 
 </script>
 </body>
