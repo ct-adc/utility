@@ -1,10 +1,11 @@
 ## 更新日志
 
-### 0.3.0
+### 1.0.0
 
 *2017-10-26*
 
-- 新增 business中新增isInCTAdm和openCTAdmPage两个方法，用于在畅唐业务后台中打开其他菜单
+- 修改 将business修改为coordinator，新增isInCTAdm和openCTAdmPage两个方法，用于在畅唐业务后台中打开其他菜单,并在主文件中引入
+
 
 ### 0.2.5
 
