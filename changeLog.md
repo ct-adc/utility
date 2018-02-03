@@ -1,5 +1,23 @@
 ## 更新日志
 
+### 1.0.3
+
+*2018-02-02*
+
+- 修复 coordinator中根据location进行domain配置为org还是net
+
+### 1.0.2
+
+*2018-02-02*
+
+- 修复 coordinator中根据location进行domain配置为org还是net
+
+### 1.0.1
+
+*2018-02-02*
+
+- 修复 coordinator中根据location进行domain配置为org还是net
+
 ### 1.0.0
 
 *2017-10-26*

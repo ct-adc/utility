@@ -1,8 +1,10 @@
 define(function(){
 
     function isInCTAdm(){
-        document.domain = 'ct108.org';
-        return window.parent.window.location.hostname.indexOf('admin.ct108.org')===0;
+        document.domain = location.host.indexOf('ct108.net') > -1 ? 'ct108.net' : 'ct108.org';
+        var domain = location.host.indexOf('ct108.net') > -1 ? 'admin.ct108.net' : 'admin.ct108.org';
+
+        return window.parent.window.location.hostname.indexOf(domain)===0;
     }
     /**
      * 打开一个畅唐业务管理后台的某个菜单(该菜单需在页面上，否则会抛出异常)
@@ -10,7 +12,7 @@ define(function(){
      * @param permissionCode 权限码 需要打开的页面的权限码
      */
     function openCTAdmPage(href, permissionCode) {
-        document.domain = 'ct108.org';
+        document.domain = location.host.indexOf('ct108.net') > -1 ? 'ct108.net' : 'ct108.org';
         var parentDoc = $(window.parent.window.document);
         var link = parentDoc.find('a[data-id=' + permissionCode + ']');
         var tab = parentDoc.find('li[data-key=' + permissionCode + ']');
