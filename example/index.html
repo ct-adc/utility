@@ -8,162 +8,166 @@
 </head>
 <body>
 <script src="../lib/index.js"></script>
-<script src="http://static.tcy365.com/cdn/component/area/2.0.0/area.min.js"></script>
+<script src="http://static.tcy365.com/cdn/component/area/3.0.0/area.min.js"></script>
 <script>
     var utility=window['ct-utility'];
-    var obj1={
-        name:1,
-        age:1,
-        hobbies:[{name:'music'},{name:'snowboarding'},{name:'skydiving'}],
-        jsonS:'{"name":"music"}',
-        jsonS2:'[{"name":"music"},{"name":"music"}]'
-    };
-    console.log(utility.objTransfer.upperKey(obj1,true));
-
-    var obj2={
-        Name:1,
-        Age:1,
-        Hobbies:[{Name:'music'},{Name:'snowboarding'},{Name:'skydiving'}],
-        JsonS2:'[{"Name":"music"},{"Name":"music","Age":{"Name":"music"}}]'
-    };
-    console.log(utility.objTransfer.lowerKey(obj2,true));
-
-// Storage test
-    console.log( '--- storage test start ---' );
-    utility.localStorage.set( 'testLocal', 123 );
-    utility.sessionStorage.set( 'testSession', 223 );
-    
-    console.log( utility.localStorage.get('testLocal') );
-    console.log( utility.sessionStorage.get('testSession') );
-
-    utility.localStorage.remove( 'testLocal' );
-    utility.sessionStorage.remove( 'testSession' );
-
-    console.log( utility.localStorage.get('testLocal') );
-    console.log( utility.sessionStorage.get('testSession') );
-
-    utility.localStorage.set( 'testLocal', 323 );
-    utility.sessionStorage.set( 'testSession', 423 );
-    
-    console.log( utility.localStorage.get('testLocal') );
-    console.log( utility.sessionStorage.get('testSession') );
-
-    utility.localStorage.clear();
-    utility.sessionStorage.clear();
-
-    console.log( utility.localStorage.get('testLocal') );
-    console.log( utility.sessionStorage.get('testSession') );
-    console.log( '--- storage test end ---' );
-
-// Cookie test, need server
-    console.log( '--- cookie test start ---' );
-    console.log( document.cookie );
-
-    utility.cookie.set('test0', 'Hello world!');
-    utility.cookie.set('test1', 'Unicode test: \u00E0\u00E8\u00EC\u00F2\u00F9', Infinity);
-    utility.cookie.set('test2', 'Hello world!', new Date(2020, 5, 12));
-    utility.cookie.set('test3', 'Hello world!', new Date(2027, 2, 3), '/blog');
-    utility.cookie.set('test4', 'Hello world!', 'Sun, 06 Nov 2022 21:43:15 GMT');
-    utility.cookie.set('test5', 'Hello world!', 'Tue, 06 Dec 2022 13:11:07 GMT', '/home');
-    utility.cookie.set('test6', 'Hello world!', 150);
-    utility.cookie.set('test7', 'Hello world!', 245, '/content');
-    utility.cookie.set('test8', 'Hello world!', null, null, 'example.com');
-    utility.cookie.set('test9', 'Hello world!', null, null, null, true);
-    utility.cookie.set('test1;=', 'Safe character test', Infinity);
-
-    console.log( document.cookie );
-
-    console.log( utility.cookie.has('test0') );
-    utility.cookie.remove('test0')
-    console.log( utility.cookie.has('test0') );
-
-    console.log( utility.cookie.keys() );
-    console.log( '--- cookie test end ---' );
-
-
-    var uri='https://www.baidu.com/s?wd=eji&rsv_spt=1&rsv_iqid=0xddfda8aa0002ad0c&issp=1&f=8&rsv_bp=0&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_sug3=4&rsv_sug1=2&rsv_sug7=101&rsv_sug2=0&inputT=624&rsv_sug4=1502';
-    console.log(utility.URIParser.uriParser(uri));
-    console.log(utility.URIParser.getParamGroup(uri));
-    console.log(utility.URIParser.getParam(uri,'wd'));
-
-
-    console.log(utility.dateFilter(+new Date(), 'y/MM/dd hh:mm:ss'));
-    console.log(utility.dateFilter('1483410908227', 'yyyy/MM/dd hh:mm:ss'));
-
-
-    console.log('trimSome',utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['age.n']))
-    console.log('trimSome',utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['name','age.n']))
-
-
-    var object1 = {
-        apple: 0,
-        banana: { weight: 52, price: 100 },
-        cherry: 97
-    };
-    var object2 = {
-        banana: { price: 200 },
-        durian: 100
-    };
-    console.log(utility.base.extend(true,object1,object2));
-    console.log(utility.base.extend(false,object1,object2));
-    console.log(utility.base.getByteLen('efjeifji中国'));
-
-    console.log(utility.dateFilter('2010-01-01','yyyy/MM/dd HH:mm:ss'));
-    console.log(utility.dateFilter('2010-01-01 10:00:00','yyyy/MM/dd HH:mm:ss'));
-
-    console.log(utility.INFO)
-
-    console.log(utility.areaDataFormat.areaTransfer())
-
-    console.log(utility.areaDataFormat.areaType('浙江'));
-    console.log(utility.areaDataFormat.areaType('0601'));
-
-    console.log(utility.areaDataFormat.getAreaIdByName('浙江-杭州'));
-    console.log(utility.areaDataFormat.getAreaNameById('0601'));
-
-    var object3={
-        name:null,
-        age:null,
-        hobby:null,
-        n:'',
-        m:0,
-        o:{
-            v:null,
-            w:'   ',
-            m:0
-        },
-        t:'   efjie   jfief    '
-    };
-    console.log(utility.objTransfer.transferSome(object3,[
-        {
-            keys:['name','o.v'],
-            rule:'$null2str'
-        },{
-            keys:['age'],
-            rule:'$null2zero'
-        },{
-            keys:['hobby'],
-            rule:'$null2arr'
-        },{
-            keys:['n'],
-            rule:'$empty2zero-strict'
-        },{
-            keys:['o.w'],
-            rule:'$empty2zero-relaxed'
-        },{
-            keys:['t'],
-            rule:'$trim'
-        }
-    ]));
-
-
-    console.log('scrollbarWidth = ' + utility.scrollbar.getWidth() + 'px');
-
-    console.log('12345.678  =>  ' + utility.numberFormat.split(12345.678, 4));
+//    var obj1={
+//        name:1,
+//        age:1,
+//        hobbies:[{name:'music'},{name:'snowboarding'},{name:'skydiving'}],
+//        jsonS:'{"name":"music"}',
+//        jsonS2:'[{"name":"music"},{"name":"music"}]'
+//    };
+//    console.log(utility.objTransfer.upperKey(obj1,true));
+//
+//    var obj2={
+//        Name:1,
+//        Age:1,
+//        Hobbies:[{Name:'music'},{Name:'snowboarding'},{Name:'skydiving'}],
+//        JsonS2:'[{"Name":"music"},{"Name":"music","Age":{"Name":"music"}}]'
+//    };
+//    console.log(utility.objTransfer.lowerKey(obj2,true));
+//
+//// Storage test
+//    console.log( '--- storage test start ---' );
+//    utility.localStorage.set( 'testLocal', 123 );
+//    utility.sessionStorage.set( 'testSession', 223 );
+//
+//    console.log( utility.localStorage.get('testLocal') );
+//    console.log( utility.sessionStorage.get('testSession') );
+//
+//    utility.localStorage.remove( 'testLocal' );
+//    utility.sessionStorage.remove( 'testSession' );
+//
+//    console.log( utility.localStorage.get('testLocal') );
+//    console.log( utility.sessionStorage.get('testSession') );
+//
+//    utility.localStorage.set( 'testLocal', 323 );
+//    utility.sessionStorage.set( 'testSession', 423 );
+//
+//    console.log( utility.localStorage.get('testLocal') );
+//    console.log( utility.sessionStorage.get('testSession') );
+//
+//    utility.localStorage.clear();
+//    utility.sessionStorage.clear();
+//
+//    console.log( utility.localStorage.get('testLocal') );
+//    console.log( utility.sessionStorage.get('testSession') );
+//    console.log( '--- storage test end ---' );
+//
+//// Cookie test, need server
+//    console.log( '--- cookie test start ---' );
+//    console.log( document.cookie );
+//
+//    utility.cookie.set('test0', 'Hello world!');
+//    utility.cookie.set('test1', 'Unicode test: \u00E0\u00E8\u00EC\u00F2\u00F9', Infinity);
+//    utility.cookie.set('test2', 'Hello world!', new Date(2020, 5, 12));
+//    utility.cookie.set('test3', 'Hello world!', new Date(2027, 2, 3), '/blog');
+//    utility.cookie.set('test4', 'Hello world!', 'Sun, 06 Nov 2022 21:43:15 GMT');
+//    utility.cookie.set('test5', 'Hello world!', 'Tue, 06 Dec 2022 13:11:07 GMT', '/home');
+//    utility.cookie.set('test6', 'Hello world!', 150);
+//    utility.cookie.set('test7', 'Hello world!', 245, '/content');
+//    utility.cookie.set('test8', 'Hello world!', null, null, 'example.com');
+//    utility.cookie.set('test9', 'Hello world!', null, null, null, true);
+//    utility.cookie.set('test1;=', 'Safe character test', Infinity);
+//
+//    console.log( document.cookie );
+//
+//    console.log( utility.cookie.has('test0') );
+//    utility.cookie.remove('test0')
+//    console.log( utility.cookie.has('test0') );
+//
+//    console.log( utility.cookie.keys() );
+//    console.log( '--- cookie test end ---' );
+//
+//
+//    var uri='https://www.baidu.com/s?wd=eji&rsv_spt=1&rsv_iqid=0xddfda8aa0002ad0c&issp=1&f=8&rsv_bp=0&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_sug3=4&rsv_sug1=2&rsv_sug7=101&rsv_sug2=0&inputT=624&rsv_sug4=1502';
+//    console.log(utility.URIParser.uriParser(uri));
+//    console.log(utility.URIParser.getParamGroup(uri));
+//    console.log(utility.URIParser.getParam(uri,'wd'));
+//
+//
+//    console.log(utility.dateFilter(+new Date(), 'y/MM/dd hh:mm:ss'));
+//    console.log(utility.dateFilter('1483410908227', 'yyyy/MM/dd hh:mm:ss'));
+//
+//
+//    console.log('trimSome',utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['age.n']))
+//    console.log('trimSome',utility.objTransfer.trimSome({name:'   1',age:{n:'   4   '}},['name','age.n']))
+//
+//
+//    var object1 = {
+//        apple: 0,
+//        banana: { weight: 52, price: 100 },
+//        cherry: 97
+//    };
+//    var object2 = {
+//        banana: { price: 200 },
+//        durian: 100
+//    };
+//    console.log(utility.base.extend(true,object1,object2));
+//    console.log(utility.base.extend(false,object1,object2));
+//    console.log(utility.base.getByteLen('efjeifji中国'));
+//
+//    console.log(utility.dateFilter('2010-01-01','yyyy/MM/dd HH:mm:ss'));
+//    console.log(utility.dateFilter('2010-01-01 10:00:00','yyyy/MM/dd HH:mm:ss'));
+//
+//    console.log(utility.INFO)
+//
+//    console.log(utility.areaDataFormat.areaTransfer())
+//
+//    console.log(utility.areaDataFormat.areaType('浙江'));
+//    console.log(utility.areaDataFormat.areaType('0601'));
+//
+//    console.log(utility.areaDataFormat.getAreaIdByName('浙江-杭州'));
+//    console.log(utility.areaDataFormat.getAreaNameById('0601'));
+//
+//    var object3={
+//        name:null,
+//        age:null,
+//        hobby:null,
+//        n:'',
+//        m:0,
+//        o:{
+//            v:null,
+//            w:'   ',
+//            m:0
+//        },
+//        t:'   efjie   jfief    '
+//    };
+//    console.log(utility.objTransfer.transferSome(object3,[
+//        {
+//            keys:['name','o.v'],
+//            rule:'$null2str'
+//        },{
+//            keys:['age'],
+//            rule:'$null2zero'
+//        },{
+//            keys:['hobby'],
+//            rule:'$null2arr'
+//        },{
+//            keys:['n'],
+//            rule:'$empty2zero-strict'
+//        },{
+//            keys:['o.w'],
+//            rule:'$empty2zero-relaxed'
+//        },{
+//            keys:['t'],
+//            rule:'$trim'
+//        }
+//    ]));
+//
+//
+//    console.log('scrollbarWidth = ' + utility.scrollbar.getWidth() + 'px');
+//
+//    console.log('12345.678  =>  ' + utility.numberFormat.split(12345.678, 4));
 
 //    console.log(utility.coordinator.isInCTAdm());
 //    console.log(utility.coordinator.openCTAdmPage('http://www.baidu.com','201030'));
 
+    console.log(utility.areaDataFormat.filterByName(['浙江', '江西-南昌', '河南-许昌-鄢陵县'], true));
+    console.log(utility.areaDataFormat.filterByName(['浙江', '江西-南昌', '河南-许昌-鄢陵县'], false));
+    console.log(utility.areaDataFormat.getAreaNameById('0601'))
+    console.log(utility.areaDataFormat.areaType('060100'))
 </script>
 </body>
 </html>

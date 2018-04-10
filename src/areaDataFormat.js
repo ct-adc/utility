@@ -6,13 +6,15 @@
  */
 define({
     /**
-     * 检测当前的地区类似
+     * 检测当前的地区类型
      * @param nameOrId 地区ID[组]或者名称[组]
      * @returns {String} 'province' | 'city' | 'region' | 'other'
      */
     areaType: function (nameOrId) {
+        var that = this;
         var isId = /^\d+$/.test(nameOrId);
         if (isId) {
+            nameOrId = that.getSimplifiedCode(nameOrId);
             if (nameOrId.length === 2) {
                 return 'province';
             } else if (nameOrId.length === 4) {
@@ -45,10 +47,10 @@ define({
             provinceId = AREA.province.filter(function (item) {
                 return item.Name === provinceName;
             })[0].ID,
-            cityId = cityName != '' ? AREA.city[provinceName].filter(function (item) {
+            cityId = cityName !== '' ? AREA.city[provinceName].filter(function (item) {
                 return item.Name === cityName;
             })[0].ID : '',
-            regionId = regionName != '' ? AREA.region[cityName].filter(function (item) {
+            regionId = regionName !== '' ? AREA.region[cityName].filter(function (item) {
                 return item.Name === regionName;
             })[0].ID : '';
 
@@ -62,6 +64,8 @@ define({
      */
     getAreaNameById: function (id, sep) {
         sep = sep || '-';
+        var that=this;
+        id = that.getSimplifiedCode(id);
         var provinceId = id.substr(0, 2),
             cityId = id.length > 2 ? id.substr(0, 4) : '',
             regionId = id.length > 4 ? id.substr(0, 6) : '',
@@ -136,6 +140,142 @@ define({
             })
         });
         return provincesData;
+    },
+    /**
+     * 获取简化版的地区code,如010100转化为0101
+     * @param code {*}
+     * @returns {*}
+     */
+    getSimplifiedCode: function(code){
+        if(code * 1 % 10000 === 0){
+            code = code.substr(0, 2);
+        }else if(code * 1 % 100 === 0){
+            code = code.substr(0, 4);
+        }
+        return code;
+    },
+    /**
+     * 根据地区code列表获取符合(不符合)该列表的源地区数据，和项目中的定向/屏蔽对应
+     * @param codeList 地区编码列表
+     * @param belong 是属于（定向）还是不属于(屏蔽)
+     * @returns {{province: Array, city: {}, region: {}}}
+     */
+    filterByCode(codeList, belong){
+        var that = this;
+        //以下均为code集合
+        var originalProvinceList = [];
+        var originalCityList = [];
+        var originalRegionList = [];
+        var result = {
+            province: [],
+            city: {},
+            region: {}
+        };
+        if(typeof belong === 'undefined'){
+            belong = true;
+        }
+
+        // 是否为符合条件的province
+        var isValidProvince = function(provinceCode, belong){
+            var isInOriginalProvinceList = originalProvinceList.indexOf(provinceCode) > -1;
+            var hasCityInOriginalCityList = originalCityList.filter(function(cityCode){
+                return provinceCode === cityCode.substr(0, 2);
+            }).length > 0;
+            var hasRegionInOriginalRegionList = originalRegionList.filter(function(regionCode){
+                return provinceCode === regionCode.substr(0, 2);
+            }).length > 0;
+
+            if(belong){
+                return isInOriginalProvinceList || hasCityInOriginalCityList || hasRegionInOriginalRegionList;
+            }
+            return !isInOriginalProvinceList;
+        };
+        // 是否为符合条件的city
+        var isValidCity = function(cityCode, belong){
+            var isInOriginalCityList = originalCityList.indexOf(cityCode) > -1;
+
+            var isProvinceInOriginalProvinceList = originalProvinceList.filter(function(provinceCode){
+                return provinceCode === cityCode.substr(0, 2);
+            }).length > 0;
+
+            var hasRegionInOriginalRegionList = originalRegionList.filter(function(regionCode){
+                return cityCode === regionCode.substr(0, 4);
+            }).length > 0;
+
+            if(belong){
+                return isInOriginalCityList || isProvinceInOriginalProvinceList || hasRegionInOriginalRegionList;
+            }
+            return !isInOriginalCityList && !isProvinceInOriginalProvinceList;
+        };
+        // 是否为符合条件的region
+        var isValidRegion = function(regionCode, belong){
+            var isProvinceInOriginalProvinceList = originalProvinceList.filter(function(provinceCode){
+                return regionCode.substr(0, 2) === provinceCode;
+            }).length > 0;
+            var isCityInOriginalCityList = originalCityList.filter(function(cityCode){
+                return regionCode.substr(0, 4) === cityCode;
+            }).length > 0;
+            var isInOriginalRegionList = originalRegionList.indexOf(regionCode) > -1;
+
+            if(belong){
+                return isProvinceInOriginalProvinceList || isCityInOriginalCityList || isInOriginalRegionList;
+            }
+            return !isProvinceInOriginalProvinceList && !isCityInOriginalCityList && ! isInOriginalRegionList;
+        };
+
+        //解析地区列表，总结出省市区列表，以便后续的符合性检测
+        codeList.map(function(code){
+            code = that.getSimplifiedCode(code);
+            var areaType = that.areaType(code);
+
+            if (areaType === 'province'){
+                originalProvinceList.push(code);
+            } else if(areaType === 'city'){
+                originalCityList.push(code);
+            } else if(areaType === 'region'){
+                originalRegionList.push(code);
+            }
+        });
+
+        //从AREA中筛选符合条件地区并更新到result
+        result.province = AREA.province.filter(function(province){
+            return isValidProvince(province.ID, belong);
+        });
+        for (var provinceKey in AREA.city){
+            if(AREA.city.hasOwnProperty(provinceKey)){
+                var cities = AREA.city[provinceKey];
+                result.city[provinceKey] = cities.filter(function(city){
+                    return isValidCity(city.ID, belong);
+                })
+            }
+        }
+        for(var cityKey in AREA.region){
+            if(AREA.region.hasOwnProperty(cityKey)){
+                var regions = AREA.region[cityKey];
+
+                result.region[cityKey] = regions.filter(function(region){
+                    return isValidRegion(region.ID, belong);
+                })
+            }
+        }
+        return result;
+    },
+    /**
+     * 根据地区名称列表获取符合条件的地区源数据
+     * @param nameList 地区列表 分隔符为非中文即可
+     * @param belong 是属于（定向）还是不属于(屏蔽)
+     * @returns {*|{province: Array, city: {}, region: {}}}
+     */
+    filterByName(nameList, belong){
+        var that = this;
+        var codeList = nameList.map(function(item){
+            return that.getAreaIdByName(item);
+        });
+
+        if(typeof belong === 'undefined'){
+            belong = true;
+        }
+        return that.filterByCode(codeList, belong);
     }
 });
 

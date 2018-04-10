@@ -1,5 +1,13 @@
 ## 更新日志
 
+### 1.1.0
+
+*2018-04-10*
+
+- 优化 areaDataFormat中用到id时，将该id处理为简化的id
+
+- 新增 新增areaDataFormat之getSimplifiedCode & filterByCode & filterByName
+
 ### 1.0.3
 
 *2018-02-02*
