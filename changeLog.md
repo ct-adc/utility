@@ -1,5 +1,19 @@
 ## 更新日志
 
+### 1.2.1
+
+*2018-05-02*
+
+- 修复 修复objTransfer中关于转换对象的bug（transferArray中调用了trimObj）
+
+### 1.2.0
+
+*2018-04-20*
+
+- 修复 去掉areaFormat中es6语法
+
+- 新增 新增getProvinceList/getCityList/getRegionList
+
 ### 1.1.0
 
 *2018-04-10*

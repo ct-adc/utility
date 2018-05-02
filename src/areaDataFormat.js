@@ -126,18 +126,24 @@ define({
      * @param {String} [childrenKey='children'] 表示层级的key名称
      * @returns {Array}
      */
-    areaTransfer: function (childrenKey) {
+    areaTransfer: function(childrenKey, min) {
         childrenKey = childrenKey || 'children';
-        var provincesData = AREA.province,
+        min = min || 'region';
+        var provincesData = JSON.parse(JSON.stringify(AREA.province)),
             that = this;
 
-        provincesData.map(function (province) {
+        provincesData.map(function(province) {
             var provinceName = province.Name,
                 citiesData = that.getCitiesOfProvinceName(provinceName);
-            province[childrenKey] = citiesData;
-            citiesData.map(function (city) {
-                city[childrenKey] = that.getRegionsOfCityName(city.Name);
-            })
+            if (min !== 'province') {
+                province[childrenKey] = citiesData;
+                if (min !== 'city') {
+                    citiesData.map(function(city) {
+                        city[childrenKey] = that.getRegionsOfCityName(city.Name);
+                    })
+                }
+            }
+
         });
         return provincesData;
     },
@@ -160,7 +166,7 @@ define({
      * @param belong 是属于（定向）还是不属于(屏蔽)
      * @returns {{province: Array, city: {}, region: {}}}
      */
-    filterByCode(codeList, belong){
+    filterByCode: function(codeList, belong){
         var that = this;
         //以下均为code集合
         var originalProvinceList = [];
@@ -266,7 +272,7 @@ define({
      * @param belong 是属于（定向）还是不属于(屏蔽)
      * @returns {*|{province: Array, city: {}, region: {}}}
      */
-    filterByName(nameList, belong){
+    filterByName: function(nameList, belong){
         var that = this;
         var codeList = nameList.map(function(item){
             return that.getAreaIdByName(item);
@@ -276,6 +282,46 @@ define({
             belong = true;
         }
         return that.filterByCode(codeList, belong);
+    },
+    getProvinceList: function(){
+        return this.areaTransfer();
+    },
+    getCityList: function(sep){
+        sep = sep || '-';
+        var treeData = this.areaTransfer('children', 'city');
+        var data = [];
+        treeData.map(function(province){
+            var provinceID = province.ID;
+            var provinceName = province.Name;
+            province.children.map(function(city){
+                data.push({
+                    ID: city.ID,
+                    Name: provinceName+sep+city.Name
+                })
+            });
+        });
+        return data;
+    },
+    getRegionList: function(sep){
+        sep = sep || '-';
+        var treeData = this.areaTransfer('children', 'region');
+        var data = [];
+        treeData.map(function(province){
+            var provinceID = province.ID;
+            var provinceName = province.Name;
+            province.children.map(function(city){
+                var cityID = city.ID;
+                var cityName = city.Name;
+
+                city.children.map(function(region){
+                    data.push({
+                        ID: region.ID,
+                        Name: provinceName+sep+cityName+sep+region.Name
+                    })
+                })
+            });
+        });
+        return data;
     }
 });
 
